@@ -1,0 +1,49 @@
+Private stack() As Variant
+
+Private Function IsNotEmptyArray(parArray As Variant) As Boolean
+  On Error Resume Next
+  IsNotEmptyArray = LBound(parArray) <= UBound(parArray)
+End Function
+
+Public Sub Push(elem As Variant)
+    If IsNotEmptyArray(stack) Then
+        'expand the array by 1 element
+        ReDim Preserve stack(UBound(stack) + 1)
+    Else
+        'initialize an array the first element
+        ReDim stack(0)
+    End If
+    stack(UBound(stack)) = elem
+End Sub
+
+Public Function Pop() As Variant
+'check if the array is not empty
+If IsNotEmptyArray(stack) Then
+    Dim tempStack() As Variant
+    'get the right element and decrease the stack
+    Pop = stack(UBound(stack))
+    If UBound(stack) > 0 Then
+        ReDim tempStack(UBound(stack) - 1)
+        Dim i As Integer
+        For i = 0 To UBound(tempStack)
+        tempStack(i) = stack(i)
+        Next
+    End If
+    stack = tempStack
+End If
+End Function
+
+Public Function Peek() As Variant
+If IsNotEmptyArray(stack) Then
+    Peek = stack(UBound(stack))
+End If
+End Function
+
+Property Get Count() As Integer
+If IsNotEmptyArray(stack) Then
+    Count = UBound(stack) + 1
+Else
+    Count = 0
+End If
+End Property
+
